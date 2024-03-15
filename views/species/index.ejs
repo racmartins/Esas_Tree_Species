@@ -8,51 +8,64 @@
       rel="stylesheet"
     />
     <style>
-      .card-image-container {
+      body {
+        padding-top: 20px;
+      }
+      .card-image-container img {
         height: 200px;
         width: 100%;
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
+        object-fit: cover;
+      }
+      .card-body {
         display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: #f8f9fa;
+        flex-direction: column;
+        justify-content: space-between;
+        flex: 1;
+      }
+      .fixed-height {
+        overflow: hidden;
+        height: 150px; /* Ajuste conforme necessário */
+      }
+      .card {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
       }
     </style>
   </head>
   <body class="container py-4">
     <h1>Espécies Arbóreas</h1>
-    <a href="/species/add" class="btn btn-primary mb-3"
-      >Adicionar Nova Espécie</a
-    >
-    <div class="row">
+    <div class="d-flex justify-content-between mb-3">
+      <a href="/species/add" class="btn btn-success mb-3"
+        >Adicionar Nova Espécie</a
+      >
+      <a href="/gardens/manage" class="btn btn-secondary">Gerir Jardins</a>
+    </div>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
       <% species.forEach(function(specie) { %>
-      <div class="col-md-4 mb-4">
-        <div class="card">
-          <% if(specie.image_url) { %>
-          <div
-            class="card-image-container"
-            style="background-image: url('<%= specie.image_url %>')"
-          ></div>
-          <% } else { %>
-          <div
-            class="card-image-container"
-            style="background-image: url('/img/img-padrao.png')"
-          ></div>
-
-          <% } %>
+      <div class="col">
+        <div class="card h-100 shadow-sm">
+          <div class="card-image-container">
+            <img
+              src="<%= specie.image_url ? specie.image_url : url('img/img-padrao.jpg') %>"
+              alt="<%= species.common_name %>"
+              onerror="this.onerror=null;this.src='http://localhost:3000/img/img-padrao.jpg';"
+              class="img-fluid"
+            />
+          </div>
           <div class="card-body d-flex flex-column">
             <h5 class="card-title">
               <%= specie.common_name %> (<%= specie.scientific_name %>)
             </h5>
-            <p class="card-text"><%= specie.description %></p>
-            <ul>
-              <li>Altura: <%= specie.characteristics.altura %></li>
-              <li>Diâmetro: <%= specie.characteristics.diâmetro %></li>
-              <li>Folhagem: <%= specie.characteristics.folhagem %></li>
-            </ul>
-            <p class="card-text">Habitat: <%= specie.habitat %></p>
+            <div class="fixed-height">
+              <p class="card-text"><%= specie.description %></p>
+              <ul>
+                <li>Altura: <%= specie.characteristics.altura %></li>
+                <li>Diâmetro: <%= specie.characteristics.diâmetro %></li>
+                <li>Folhagem: <%= specie.characteristics.folhagem %></li>
+              </ul>
+              <p class="card-text">Habitat: <%= specie.habitat %></p>
+            </div>
             <!-- Botão Ver Detalhes -->
             <a href="/species/<%= specie._id %>" class="btn btn-info mt-auto"
               >Ver Detalhes</a
@@ -75,7 +88,6 @@
       </div>
       <% }) %>
     </div>
-    <!-- Controlos de Paginação -->
     <nav aria-label="Paginação das espécies arbóreas">
       <ul class="pagination justify-content-center">
         <% for(let i = 1; i <= pages; i++) { %>

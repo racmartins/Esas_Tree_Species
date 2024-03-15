@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Editar Jardim</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Editar Jardim</h1>
+      <form action="/gardens/<%= garden._id %>/edit" method="POST">
+        <div class="form-group">
+          <label for="name">Nome do Jardim:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="name"
+            name="name"
+            value="<%= garden.name %>"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="longitude">Longitude:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="longitude"
+            name="longitude"
+            value="<%= garden.location.coordinates[0] %>"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="latitude">Latitude:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="latitude"
+            name="latitude"
+            value="<%= garden.location.coordinates[1] %>"
+            required
+          />
+        </div>
+        <button type="submit" class="btn btn-success">Atualizar Jardim</button>
+      </form>
+    </div>
+  </body>
+</html>

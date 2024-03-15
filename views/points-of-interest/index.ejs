@@ -9,50 +9,64 @@
       rel="stylesheet"
     />
     <style>
-      .card-footer {
-        display: flex;
-        justify-content: flex-start; /* Alinha os botões à esquerda */
-        gap: 10px; /* Espaço entre os botões */
-        padding-top: 0.5rem; /* Espaçamento superior para separar do corpo do card */
+      body {
+        background-color: #f8f9fa; /* Cor de fundo suave para a página */
       }
-
-      .btn-ver-detalhes {
-        width: 100%; /* Ocupa a largura total do corpo do card */
-        margin-top: auto; /* Empurra para baixo dentro do corpo do card */
-        margin-bottom: 0.5rem; /* Espaçamento inferior para não tocar no footer */
-      }
-
-      .card-body {
-        display: flex;
-        flex-direction: column; /* Organiza o conteúdo em coluna */
-      }
-      /* Ajusta a altura dos cards para manter a consistência */
       .card {
         height: 100%;
         display: flex;
         flex-direction: column;
+        border: 0; /* Remove bordas do card */
+        border-radius: 0.5rem; /* Arredonda os cantos do card */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra sutil para destacar os cards */
+      }
+      .card-body {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+      }
+      .btn-ver-detalhes {
+        width: auto; /* Permite que o botão ocupe apenas o espaço necessário */
+        margin-top: auto; /* Empurra para o fim do corpo do card */
+        margin-bottom: 0.5rem; /* Espaçamento inferior */
+      }
+      .card-footer {
+        background-color: #fff; /* Mantém o footer consistente com o corpo do card */
+        border-top: 1px solid rgba(0, 0, 0, 0.125); /* Linha sutil para separar o footer do corpo */
+        display: flex;
+        justify-content: flex-start;
+        gap: 10px;
+      }
+      .btn-primary,
+      .btn-success,
+      .btn-danger,
+      .btn-info {
+        border: 0; /* Estilo mais limpo para os botões */
+      }
+      h1 {
+        color: #006400; /* Cor que combina com a homepage */
       }
     </style>
   </head>
-  <body class="container mt-5">
+  <body class="container py-4">
     <h1 class="mb-4">Pontos de Interesse</h1>
     <a href="/points-of-interest/add" class="btn btn-success mb-4"
       >Adicionar Novo Ponto de Interesse</a
     >
-    <div class="row">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
       <% points.forEach(function(point) { %>
-      <div class="col-md-4 mb-3">
-        <div class="card">
-          <div class="card-body">
+      <div class="col">
+        <div class="card h-100">
+          <div class="card-body d-flex flex-column">
             <h5 class="card-title"><%= point.name %></h5>
             <p class="card-text">
-              Latitude: <%= point.latitude %><br />
-              Longitude: <%= point.longitude %>
+              Latitude: <%= point.latitude %><br />Longitude: <%=
+              point.longitude %>
             </p>
             <p class="card-text"><%= point.description %></p>
             <a
               href="/points-of-interest/detail/<%= point._id %>"
-              class="btn btn-info btn-ver-detalhes"
+              class="btn btn-info btn-ver-detalhes mt-auto"
               >Ver Detalhes</a
             >
           </div>
@@ -65,7 +79,7 @@
             <a
               href="/points-of-interest/delete/<%= point._id %>"
               class="btn btn-danger"
-              onclick="return confirm('Tem a certeza que deseja excluír este ponto de interesse?');"
+              onclick="return confirm('Tem a certeza que deseja excluir este ponto de interesse?');"
               >Excluir</a
             >
           </div>

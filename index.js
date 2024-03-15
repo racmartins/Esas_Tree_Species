@@ -5,6 +5,7 @@ const QRCode = require("qrcode");
 const TreeSpecies = require("./models/TreeSpecies"); // Assegure-se de que o caminho está correto
 const Video = require("./models/Video"); // Ajuste o caminho conforme necessário
 const PointOfInterest = require("./models/PointOfInterest");
+const Garden = require("./models/Garden");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -12,18 +13,228 @@ const PORT = process.env.PORT || 3000;
 // Define a pasta que será servida publicamente
 app.use(express.static("public"));
 
+// Define o motor de renderização EJS
 app.set("view engine", "ejs");
 
+//permite usar métodos HTTP, como PUT ou DELETE, em lugares onde o cliente não os suporta
 const methodOverride = require("method-override");
 
 // Depois de inicializar o app
 app.use(methodOverride("_method"));
 
-app.use(express.json()); // Middleware para parsear o corpo da requisição JSON
+app.use(express.json()); // Middleware para analisar o corpo da solicitação JSON
 app.use(express.urlencoded({ extended: true }));
 
 // Conexão com a base de dados MongoDB
 mongoose.connect("mongodb://localhost:27017/esas_tree_species_db");
+
+// Rota raiz que renderiza a homepage.ejs
+app.get("/", (req, res) => {
+  res.render("homepage");
+});
+
+// Rota para listar jardins
+app.get("/gardens", async (req, res) => {
+  try {
+    const gardens = await Garden.find();
+    res.render("./gardens/index", { gardens });
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+// Rota para mostrar o formulário de adição de jardins
+app.get("/gardens/add", (req, res) => {
+  res.render("./gardens/add-garden");
+});
+
+// Rota para processar o formulário de adição de jardins
+app.post("/gardens", async (req, res) => {
+  const { name, longitude, latitude } = req.body;
+
+  // Certifique-se de que longitude e latitude são números
+  const coordinates = [parseFloat(longitude), parseFloat(latitude)];
+
+  if (isNaN(coordinates[0]) || isNaN(coordinates[1])) {
+    return res
+      .status(400)
+      .send("Longitude e latitude devem ser números válidos.");
+  }
+  try {
+    const garden = new Garden({
+      name,
+      location: {
+        type: "Point",
+        coordinates,
+      },
+    });
+    await garden.save();
+    res.redirect("/gardens");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Erro ao guardar o jardim");
+  }
+});
+
+// Rota para listar jardins e preparar a adição de árvores
+app.get("/gardens/manage", async (req, res) => {
+  try {
+    const gardens = await Garden.find().populate("trees");
+    const trees = await TreeSpecies.find();
+    // Marca árvores que já estão associadas a algum jardim
+    const markedTrees = trees.map((tree) => {
+      let isInGarden = gardens.some((garden) =>
+        garden.trees.some((gardenTree) => gardenTree.equals(tree._id))
+      );
+      return {
+        ...tree._doc,
+        isInGarden: isInGarden,
+      };
+    });
+
+    res.render("gardens/manage-gardens", { gardens, trees: markedTrees });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Erro ao carregar a página de gestão de jardins");
+  }
+});
+
+// Rota para Mostrar Árvores Disponíveis para Adicionar ao Jardim
+app.get("/gardens/:gardenId/add-trees", async (req, res) => {
+  const { gardenId } = req.params;
+  try {
+    const trees = await TreeSpecies.find();
+    const garden = await Garden.findById(gardenId);
+    res.render("add-trees-to-garden", { trees, garden });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Erro ao carregar árvores para adicionar ao jardim");
+  }
+});
+
+// Rota para Processar Adição de Árvores ao Jardim
+app.post("/gardens/:gardenId/add-trees", async (req, res) => {
+  const { gardenId } = req.params;
+  let { treeIds } = req.body;
+  treeIds = Array.isArray(treeIds) ? treeIds : [treeIds];
+
+  try {
+    // Filtra árvores que já estão associadas a qualquer jardim
+    const availableTrees = await TreeSpecies.find({
+      _id: { $in: treeIds },
+      garden: { $exists: false },
+    }).select("_id");
+    const availableTreeIds = availableTrees.map((tree) => tree._id);
+
+    if (availableTreeIds.length > 0) {
+      await Garden.findByIdAndUpdate(gardenId, {
+        $addToSet: { trees: { $each: availableTreeIds } },
+      });
+
+      // Marca as árvores adicionadas como associadas ao jardim
+      await TreeSpecies.updateMany(
+        { _id: { $in: availableTreeIds } },
+        { $set: { garden: gardenId } }
+      );
+
+      res.redirect("/gardens/manage");
+    } else {
+      res
+        .status(400)
+        .send("Todas as árvores selecionadas já estão associadas a jardins.");
+    }
+  } catch (error) {
+    console.error("Erro ao adicionar árvores ao jardim:", error);
+    res.status(500).send("Erro ao processar a solicitação.");
+  }
+});
+
+// Rota para editar jardins
+app.get("/gardens/:gardenId/edit", async (req, res) => {
+  try {
+    const { gardenId } = req.params;
+    const garden = await Garden.findById(gardenId);
+    if (!garden) {
+      return res.status(404).send("Jardim não encontrado.");
+    }
+    res.render("./gardens/edit-gardens", { garden });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Erro ao buscar jardim para edição.");
+  }
+});
+
+// Rota Post para processar a Edição
+app.post("/gardens/:gardenId/edit", async (req, res) => {
+  const { name, longitude, latitude } = req.body;
+  const coordinates = [parseFloat(longitude), parseFloat(latitude)];
+  const { gardenId } = req.params;
+
+  try {
+    await Garden.findByIdAndUpdate(gardenId, {
+      name,
+      location: { type: "Point", coordinates },
+    });
+    res.redirect("/gardens");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Erro ao atualizar o jardim.");
+  }
+});
+
+// Rota GET para detalhes do jardim
+app.get("/gardens/:gardenId", async (req, res) => {
+  const { gardenId } = req.params;
+
+  try {
+    // Busca o jardim pelo ID e popula com as árvores associadas
+    // Certifique-se de que o nome do campo que contém as referências das árvores é 'trees'
+    const garden = await Garden.findById(gardenId).populate("trees");
+
+    if (!garden) {
+      return res.status(404).send("Jardim não encontrado");
+    }
+
+    // Renderiza a view 'detail.ejs' passando o objeto garden encontrado
+    res.render("./gardens/detail", { garden });
+  } catch (error) {
+    console.error("Erro ao buscar detalhes do jardim:", error);
+    res.status(500).send("Erro ao processar a solicitação");
+  }
+});
+
+// Rota Post para remover um jardim
+app.post("/gardens/:gardenId/delete", async (req, res) => {
+  try {
+    const { gardenId } = req.params;
+    await Garden.findByIdAndDelete(gardenId);
+    res.redirect("/gardens");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Erro ao remover o jardim.");
+  }
+});
+
+// Rota para remover árvores do jardim
+app.post("/gardens/:gardenId/remove-trees", async (req, res) => {
+  const { gardenId } = req.params;
+  let { treeIdsToRemove } = req.body;
+
+  // Assegura que treeIdsToRemove é um array
+  if (!Array.isArray(treeIdsToRemove)) {
+    treeIdsToRemove = [treeIdsToRemove].filter(Boolean); // Filtra valores falsy como null ou undefined
+  }
+
+  try {
+    await Garden.findByIdAndUpdate(gardenId, {
+      $pull: { trees: { $in: treeIdsToRemove } },
+    });
+    res.redirect("back");
+  } catch (error) {
+    console.error("Erro ao remover árvores:", error);
+    res.status(500).send("Erro ao processar a solicitação");
+  }
+});
 
 // Rota para listar espécies
 app.get("/species", async (req, res) => {
@@ -43,11 +254,11 @@ app.get("/species", async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).send("Erro ao procurar espécies.");
+    res.status(500).send("Erro ao buscar espécies.");
   }
 });
 
-// Rota para o formulário para adicionar uma nova espécie
+// Rota para o formulário de adição de uma nova espécie
 app.get("/species/add", (req, res) => {
   res.render("./species/add-species");
 });
@@ -129,13 +340,13 @@ app.get("/species/delete/:id", async (req, res) => {
 app.get("/videos", async (req, res) => {
   try {
     const videos = await Video.find();
-    res.render("videos/index", { videos });
+    res.render("./videos/index", { videos });
   } catch (error) {
     res.status(500).send(error);
   }
 });
 
-// Rota para o formulário para adicionar um novo video
+// Rota para o formulário de adição de um novo video
 app.get("/videos/add", (req, res) => {
   res.render("./videos/add");
 });
@@ -208,7 +419,7 @@ app.post("/points-of-interest", async (req, res) => {
       // Não definimos ainda o qrCodeData porque precisamos gerá-lo
     });
 
-    // Combina informações para o texto do QR-Code. Aqui você pode personalizar conforme necessário
+    // Combina informações para o texto do QR-Code. Aqui pode personalizar conforme necessário
     const qrCodeText = `Name: ${name}\nLatitude: ${latitude}\nLongitude: ${longitude}\nDescription: ${description}\nAdditional Info: ${additionalInfo}`;
 
     // Gera QR-Code como Data URL
