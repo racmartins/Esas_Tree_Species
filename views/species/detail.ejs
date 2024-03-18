@@ -8,57 +8,66 @@
       rel="stylesheet"
     />
     <style>
+      .img-detail-container {
+        display: flex;
+        justify-content: center; /* Centra a imagem na página */
+        margin-top: 2rem;
+        background: #f8f9fa;
+      }
       .img-detail {
-        max-height: 400px; /* Limita a altura máxima da imagem */
-        object-fit: contain; /* Assegura que a imagem cubra o espaço designado sem perder as proporções */
-        width: 100%; /* Garante que a imagem seja responsiva e ocupe toda a largura do container */
+        max-height: 400px;
+        object-fit: cover; /* Garante que a imagem cubra o espaço alocado sem distorção */
+        width: auto; /* Adapta a largura automaticamente */
+        max-width: 100%; /* Garante que a imagem não exceda a largura do container */
+        border-radius: 0.25rem; /* Arredonda os cantos da imagem */
       }
       .detail-container {
-        background: #f8f9fa;
-        border-radius: 0.25rem;
-        margin-top: 2rem;
-        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); /* Adiciona sombra para uma aparência mais sofisticada */
+        padding: 2rem; /* Espaçamento interno para as informações */
+        background: #ffffff; /* Fundo branco para a seção de texto */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para destaque */
+        margin-bottom: 2rem; /* Espaçamento na parte inferior */
       }
-      .card-body {
-        padding: 2rem; /* Aumenta o padding para um aspecto mais espaçoso */
+      .detail-heading {
+        color: #006400; /* Cor que combina com a homepage */
       }
-      ul {
-        padding-left: 0;
+      ul.details-list {
         list-style: none; /* Remove o estilo padrão da lista */
+        padding: 0;
       }
-      li:before {
-        content: "\2022"; /* Adiciona um bullet personalizado */
-        color: #007bff; /* Cor do bullet */
-        font-weight: bold; /* Deixa o bullet em negrito */
-        display: inline-block;
-        width: 1em; /* Espaçamento antes do texto */
-        margin-left: -1em; /* Ajusta o alinhamento do bullet com o texto */
+      ul.details-list li::before {
+        content: "• ";
+        color: #007bff; /* Cor do marcador personalizado */
+        font-weight: bold; /* Negrito para o marcador */
+        margin-right: 0.5rem; /* Espaçamento entre o marcador e o texto */
       }
     </style>
   </head>
   <body class="container py-4">
-    <div class="detail-container">
-      <h1 class="text-center">
-        Detalhes da Espécie: <%= species.common_name %>
-      </h1>
+    <div class="img-detail-container">
       <img
         src="<%= species.image_url ? species.image_url : 'http://localhost:3000/img/img-padrao.jpg' %>"
         alt="<%= species.common_name %>"
-        onerror="this.onerror=null;this.src='http://localhost:3000/img/img-padrao.jpg';"
         class="img-detail"
+        onerror="this.onerror=null;this.src='http://localhost:3000/img/img-padrao.jpg';"
       />
+    </div>
 
-      <div class="card-body">
-        <h3 class="card-title"><%= species.scientific_name %></h3>
-        <p class="card-text"><%= species.description %></p>
-        <ul>
+    <div class="detail-container text-center">
+      <h1 class="detail-heading mb-4">
+        Detalhes da Espécie: <%= species.common_name %>
+      </h1>
+      <div class="text-start">
+        <h3 class="mb-3"><%= species.scientific_name %></h3>
+        <p><%= species.description %></p>
+        <ul class="details-list">
           <li>Altura: <%= species.characteristics.altura %></li>
           <li>Diâmetro: <%= species.characteristics.diâmetro %></li>
           <li>Folhagem: <%= species.characteristics.folhagem %></li>
         </ul>
-        <p class="card-text">Habitat: <%= species.habitat %></p>
+        <p>Habitat: <%= species.habitat %></p>
       </div>
+      <a href="/species" class="btn btn-success mt-4">Voltar para a lista</a>
     </div>
-    <a href="/species" class="btn btn-success mt-3">Voltar para a lista</a>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>

@@ -9,6 +9,8 @@
     />
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+    <!-- Inclui o CSS da Navbar -->
+    <link href="/css/navbar.css" rel="stylesheet" />
     <style>
       .card {
         margin-top: 2rem;
@@ -28,10 +30,16 @@
       .btn-close {
         background: none; /* Botão de fechar sem background para um look mais limpo */
       }
+      h1 {
+        color: #006400; /* Cor que combina com a homepage */
+      }
     </style>
   </head>
   <body class="container py-4">
-    <h1>Jardins e suas Árvores</h1>
+    <!-- Inclui o partial da navbar -->
+    <%- include('../partials/navbar') %>
+
+    <h1 style="margin-top: 70px">Jardins e suas Árvores</h1>
     <% gardens.forEach(function(garden) { %>
     <div class="card">
       <div class="card-body">

@@ -1,9 +1,15 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const QRCode = require("qrcode");
+const bcrypt = require("bcryptjs");
 
+const session = require("express-session");
+const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
+
+const User = require("./models/User"); // Caminho para o model User
 const TreeSpecies = require("./models/TreeSpecies"); // Assegure-se de que o caminho está correto
-const Video = require("./models/Video"); // Ajuste o caminho conforme necessário
+const Video = require("./models/Video");
 const PointOfInterest = require("./models/PointOfInterest");
 const Garden = require("./models/Garden");
 
@@ -19,14 +25,63 @@ app.set("view engine", "ejs");
 //permite usar métodos HTTP, como PUT ou DELETE, em lugares onde o cliente não os suporta
 const methodOverride = require("method-override");
 
-// Depois de inicializar o app
+// Deve surgir depois de inicializar a app
 app.use(methodOverride("_method"));
 
 app.use(express.json()); // Middleware para analisar o corpo da solicitação JSON
 app.use(express.urlencoded({ extended: true }));
 
+app.use(
+  session({ secret: "verysecret", resave: false, saveUninitialized: true })
+);
+app.use(passport.initialize());
+app.use(passport.session());
+
 // Conexão com a base de dados MongoDB
 mongoose.connect("mongodb://localhost:27017/esas_tree_species_db");
+
+// Disponibiliza o User nas views
+app.use(function (req, res, next) {
+  res.locals.user = req.user || null;
+  next();
+});
+
+// Autenticação
+passport.use(
+  new LocalStrategy(async (username, password, done) => {
+    try {
+      const user = await User.findOne({ username });
+      if (!user) {
+        return done(null, false, { message: "Usuário não encontrado." });
+      }
+
+      const match = await bcrypt.compare(password, user.password);
+      if (match) {
+        return done(null, user);
+      } else {
+        return done(null, false, { message: "Senha incorreta." });
+      }
+    } catch (error) {
+      return done(error);
+    }
+  })
+);
+
+// Use async/await for consistency and readability
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await User.findById(id);
+    done(null, user);
+  } catch (error) {
+    done(error, null);
+  }
+});
+
+app.use("/users", require("./routes/users"));
 
 // Rota raiz que renderiza a homepage.ejs
 app.get("/", (req, res) => {

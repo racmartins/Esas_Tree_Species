@@ -1,0 +1,64 @@
+/* Personalização da Navbar */
+.navbar-custom {
+  background-color: #006400; /* Cor de fundo */
+  border-bottom: 3px solid #004d00; /* Borda inferior para definição */
+}
+
+.navbar-brand img {
+  height: 30px; /* Altura do logo */
+}
+
+/* Estilização dos itens da navbar */
+.nav-item .nav-link {
+  color: #fff; /* Cor do texto */
+}
+
+.nav-item .nav-link:hover,
+.nav-item .nav-link:focus {
+  background-color: #004d00; /* Cor de fundo ao passar o mouse ou focar */
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+  background-color: #006400; /* Cor de fundo */
+}
+
+.dropdown-item {
+  color: #fff; /* Cor do texto */
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+  background-color: #004d00; /* Cor de fundo ao passar o mouse ou focar */
+}
+
+.login-register {
+  display: flex;
+  gap: 20px; /* Espaçamento entre Login e Registo */
+  margin-right: 20px; /* Afasta do canto superior direito */
+}
+
+/* Links de autenticação */
+.login-register .nav-link {
+  color: #ffd700; /* Cor do texto */
+}
+
+.login-register .nav-link:hover {
+  color: #cca700; /* Cor do texto ao passar o mouse */
+}
+
+/* Toggler Icon */
+.navbar-toggler {
+  border-color: rgba(255, 255, 255, 0.1); /* Cor da borda */
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,..."); /* Caminho para o ícone customizado */
+}
+
+/* Ajustes responsivos */
+@media (max-width: 991px) {
+  .navbar-collapse {
+    background-color: #006400; /* Cor de fundo para menus colapsados */
+  }
+}
