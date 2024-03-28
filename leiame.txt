@@ -1,13 +1,21 @@
 Criar BD vazia no mongoDB: esas_tree_species_db
 
-
 correr script script_cria_admin.js antes de executar a app:
 
 node script_cria_admin.js
 
-Instruções necessárias a aplicar ao código para tornar áreas restritas ao administrador
-if (req.user.isAdmin) {
-  // Executa ações específicas para administrador
-} else {
-  // Acesso negado ou redireciona para outra página
-}
+As imagens utilizadas para ver em 360º, em vista panorâmica são
+armazenadas no localhost pasta public pois por questões de cors
+alguns sites de alojamento de imagens restringem o acesso a estas
+em 360º.
+
+Na presente versão da app não se encontra concluída a parte de backoffice (gestão ou administração) para vídeos pois apenas se restringiu
+o acesso no servidor (backend) sendo necessário aplicar o ocultar de alguns botões no lado do cliente (frontend). Para pontos de interesse
+é necessário completar as restrições backoffice tanto no server como no client.
+
+Nesta app foi também desenvolvido um controller que trata de implementar
+pesquisa que aplicamos a species.
+
+
+
+

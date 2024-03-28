@@ -6,7 +6,7 @@ const User = require("./models/User"); // Ajuste o caminho conforme necessário
 // String de conexão
 const dbURI = "mongodb://localhost:27017/esas_tree_species_db";
 
-// Função assíncrona para conectar ao banco de dados e criar o usuário administrador
+// Função assíncrona para conectar à base de dados e criar o utilizador administrador
 async function main() {
   try {
     await mongoose.connect(dbURI);

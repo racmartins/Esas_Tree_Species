@@ -34,7 +34,7 @@
       }
       .card-footer {
         background-color: #fff; /* Mantém o footer consistente com o corpo do card */
-        border-top: 1px solid rgba(0, 0, 0, 0.125); /* Linha sutil para separar o footer do corpo */
+        border-top: 1px solid rgba(0, 0, 0, 0.125); /* Linha subtil para separar o footer do corpo */
         display: flex;
         justify-content: flex-start;
         gap: 10px;
@@ -54,11 +54,15 @@
     <!-- Inclui o partial da navbar -->
     <%- include('../partials/navbar') %>
 
-    <h1 style="margin-top: 70px" class="mb-4">Pontos de Interesse</h1>
-    <a href="/points-of-interest/add" class="btn btn-success mb-4"
-      >Adicionar Novo Ponto de Interesse</a
-    >
-    <div class="row row-cols-1 row-cols-md-3 g-4">
+    <h1 style="color: #006400; margin-top: 80px" class="text-center mb-4">
+      Pontos de Interesse
+    </h1>
+    <div class="d-flex justify-content-end">
+      <a href="/points-of-interest/add" class="btn btn-success mb-4"
+        >Adicionar Novo Ponto de Interesse</a
+      >
+    </div>
+    <div class="row row-cols-1 row-cols-md-3 g-4" style="margin-top: 20px">
       <% points.forEach(function(point) { %>
       <div class="col">
         <div class="card h-100">

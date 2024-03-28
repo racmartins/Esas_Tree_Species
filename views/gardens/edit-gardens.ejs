@@ -25,11 +25,11 @@
   </head>
   <body>
     <div class="container shadow-sm p-3 mb-5 bg-body rounded">
-      <h1 class="text-center mb-4">Editar Jardim</h1>
+      <h3 class="text-center mb-4" style="color: #006400">Editar Jardim</h3>
       <form action="/gardens/<%= garden._id %>/edit" method="POST">
         <div class="mb-3">
           <label for="name" class="form-label"
-            ><i class="bi bi-signpost-2-fill"></i> Nome do Jardim:</label
+            ><i class="bi bi-flower1"></i> Nome do Jardim:</label
           >
           <input
             type="text"
@@ -64,6 +64,20 @@
             name="latitude"
             value="<%= garden.location.coordinates[1] %>"
             required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="panoramicImage" class="form-label">
+            <i class="fa fa-compass" aria-hidden="true"></i> Imagem Panorâmica
+          </label>
+          <input
+            type="text"
+            class="form-control"
+            id="panoramicImage"
+            name="panoramicImage"
+            placeholder="Caminho da imagem panorâmica"
+            required
+            value="<%= garden.panoramicImage %>"
           />
         </div>
         <button type="submit" class="btn btn-success">Atualizar Jardim</button>

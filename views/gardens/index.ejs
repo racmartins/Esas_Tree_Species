@@ -34,8 +34,20 @@
         justify-content: space-between;
         align-items: center;
       }
+      .list-group-item span {
+        font-size: 1.25rem; /* Aumenta o tamanho da fonte */
+        color: #006400; /* Cor azul escura para maior contraste */
+        font-weight: 700; /* Peso da fonte um pouco mais forte para destaque */
+      }
+
       .btn-outline-primary {
         margin-right: 0.5rem;
+        border-color: #0056b3; /* Ajusta a cor da borda para combinar com os nomes dos jardins */
+      }
+      .btn-outline-secondary,
+      .btn-outline-success,
+      .btn-outline-danger {
+        border-color: #343a40; /* Cor de borda mais escura para contraste */
       }
       .btn-group {
         gap: 0.5rem;
@@ -46,6 +58,11 @@
       h1 {
         color: #006400; /* Cor que combina com a homepage */
       }
+      @media (max-width: 768px) {
+        .list-group-item span {
+          font-size: 1rem; /* Reduz o tamanho da fonte em dispositivos menores */
+        }
+      }
     </style>
   </head>
   <body>
@@ -54,32 +71,46 @@
 
     <div class="content-container">
       <div class="container my-4">
-        <h1 class="mb-4 text-center">Jardins</h1>
+        <h1 class="mb-4 text-center" style="color: #006400">Jardins</h1>
+        <% if (isAdmin) { %>
         <a href="/gardens/add" class="btn btn-success mb-4">Adicionar Jardim</a>
+        <% } %>
         <div id="map"></div>
 
         <div class="list-group">
           <% gardens.forEach(garden => { %>
           <div class="list-group-item">
-            <span><%= garden.name %></span>
-            <div class="btn-group">
+            <span class="me-3"><%= garden.name %></span>
+            <div class="btn-group ms-2">
+              <% if (isAdmin) { %>
               <a
                 href="/gardens/<%= garden._id %>/edit"
-                class="btn btn-outline-secondary btn-sm"
+                class="btn btn-outline-primary btn-sm rounded"
                 >Editar</a
               >
+              <% } %>
 
               <a
                 href="/gardens/<%= garden._id %>"
-                class="btn btn-outline-primary btn-sm"
-                >Ver Detalhes</a
+                class="btn btn-outline-success btn-sm rounded"
+                >Visualizar Detalhes</a
               >
-
+              <% if (isAdmin) { %>
               <form action="/gardens/<%= garden._id %>/delete" method="post">
-                <button type="submit" class="btn btn-outline-danger btn-sm">
+                <button
+                  type="submit"
+                  class="btn btn-outline-danger btn-sm rounded"
+                  style="padding: 0.375rem 0.75rem"
+                >
                   Excluir
                 </button>
               </form>
+              <% } %>
+              <a
+                href="/gardens/<%= garden._id %>/panoramic-garden"
+                class="btn btn-outline-secondary btn-sm rounded"
+                >Vista Panorâmica</a
+              >
             </div>
           </div>
           <% }) %>

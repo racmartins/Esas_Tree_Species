@@ -9,8 +9,8 @@
       rel="stylesheet"
     />
     <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
       rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
     <style>
       .form-control:focus {
@@ -34,17 +34,21 @@
       h1 {
         color: #006400; /* Cor que combina com a homepage */
       }
+      .btn-success {
+        margin-top: 1rem; /* Espaçamento antes do botão para melhor separação */
+        width: 100%; /* Faz o botão ocupar toda a largura para uma ação clara */
+      }
     </style>
   </head>
   <body class="container mt-5">
-    <h1 class="mb-4">Editar Ponto de Interesse</h1>
+    <h1 class="text-center mb-4">Editar Ponto de Interesse</h1>
     <form
       action="/points-of-interest/<%= point._id %>?_method=PUT"
       method="POST"
     >
       <div class="mb-3 icon-field">
         <label for="name" class="form-label">Nome</label>
-        <i class="fas fa-map-marker-alt"></i>
+        <i class="fa-solid fa-route"></i>
         <input
           type="text"
           class="form-control"
@@ -86,7 +90,7 @@
           name="description"
           rows="3"
         >
-<%= point.description %></textarea
+        <%= point.description %></textarea
         >
       </div>
       <div class="mb-3">
@@ -99,7 +103,7 @@
           name="additionalInfo"
           rows="3"
         >
-<%= point.additionalInfo %></textarea
+        <%= point.additionalInfo %></textarea
         >
       </div>
       <button type="submit" class="btn btn-success">Atualizar</button>

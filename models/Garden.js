@@ -23,9 +23,10 @@ const gardenSchema = new mongoose.Schema({
     },
   ],
   // outras propriedades podem ser adicionadas aqui conforme necessário
+  panoramicImage: String, // Campo novo para a imagem panorâmica
 });
 
-// Crie um índice geoespacial para a localização
+// Cria um índice geoespacial para a localização
 gardenSchema.index({ location: "2dsphere" });
 
 const Garden = mongoose.model("Garden", gardenSchema);

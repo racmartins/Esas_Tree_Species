@@ -12,17 +12,63 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css"
     />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #f0f2f5;
+        margin-top: 20px; /* Adiciona espaço no topo da página */
+      }
+      .card {
+        margin: auto;
+        max-width: 900px; /* Largura do formulário aumentada */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      form {
+        margin-top: 50px;
+      }
+      .form-label {
+        white-space: nowrap; /* Impede que o texto do label quebre a linha */
+        overflow: hidden; /* Previne que o texto saia do seu contêiner */
+        text-overflow: ellipsis; /* Adiciona '...' ao fim se o texto for muito longo */
+        display: flex;
+        align-items: center; /* Alinha ícones e texto verticalmente */
+      }
+      .form-label i {
+        margin-right: 0.5rem; /* Espaço entre o ícone e o texto do label */
+      }
+      .icon-green {
+        color: #28a745;
+      }
+      .form-control,
+      .form-control.mb-2,
+      textarea.form-control {
+        width: 100%; /* Garante que os campos de entrada estejam alinhados e tenham o mesmo tamanho */
+      }
+      .d-grid button {
+        padding: 0.75rem; /* Ajuste no padding para botão maior */
+        font-size: 1.1rem; /* Ajuste no tamanho da fonte */
+      }
+      .button-submit {
+        text-align: center; /* Centra o botão no contêiner */
+      }
+      h3 {
+        margin-top: 10px;
+      }
+    </style>
   </head>
-  <body class="container py-5">
+  <body class="container form-container py-5">
     <div class="card shadow-sm">
       <div class="card-body">
-        <h1 style="color: #006400" class="card-title text-center mb-4">
-          Adicionar Nova Espécie
-        </h1>
+        <h3 class="card-title text-center mb-4 text-success">
+          <i class="fa-solid fa-seedling me-2"></i>Adicionar Nova Espécie
+        </h3>
         <form action="/species" method="POST">
           <div class="mb-3">
             <label for="scientific_name" class="form-label">
-              <i class="bi bi-journal-text me-2"></i>Nome Científico
+              <i class="bi bi-journal-text icon-green me-2"></i>Nome Científico
             </label>
             <input
               type="text"
@@ -34,7 +80,7 @@
           </div>
           <div class="mb-3">
             <label for="common_name" class="form-label">
-              <i class="bi bi-person-fill me-2"></i>Nome Comum
+              <i class="bi bi-person-fill icon-green me-2"></i>Nome Comum
             </label>
             <input
               type="text"
@@ -46,7 +92,7 @@
           </div>
           <div class="mb-3">
             <label for="description" class="form-label">
-              <i class="bi bi-card-text me-2"></i>Descrição
+              <i class="bi bi-card-text icon-green me-2"></i>Descrição
             </label>
             <textarea
               class="form-control"
@@ -57,7 +103,7 @@
           </div>
           <div class="mb-3">
             <label for="habitat" class="form-label">
-              <i class="bi bi-tree-fill me-2"></i>Habitat
+              <i class="bi bi-tree-fill icon-green me-2"></i>Habitat
             </label>
             <input
               type="text"
@@ -69,7 +115,7 @@
           </div>
           <div class="mb-3">
             <label class="form-label">
-              <i class="bi bi-puzzle-fill me-2"></i>Características
+              <i class="bi bi-puzzle-fill icon-green me-2"></i>Características
             </label>
             <input
               type="text"
@@ -95,7 +141,7 @@
           </div>
           <div class="mb-3">
             <label for="image_url" class="form-label">
-              <i class="bi bi-image-fill me-2"></i>URL da Imagem
+              <i class="bi bi-image-fill icon-green me-2"></i>URL da Imagem
             </label>
             <input
               type="text"
@@ -104,10 +150,13 @@
               name="image_url"
             />
           </div>
-          <div class="d-grid">
-            <button type="submit" class="btn btn-success btn-lg">
+          <div class="text-center">
+            <button type="submit" class="btn btn-success button-submit">
               Adicionar
             </button>
+            <a href="/species" class="btn btn-secondary">
+              <i class="bi bi-x-circle-fill me-2"></i>Cancelar
+            </a>
           </div>
         </form>
       </div>
