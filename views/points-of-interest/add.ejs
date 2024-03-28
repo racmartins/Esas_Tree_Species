@@ -8,10 +8,26 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
     <style>
       body {
         background-color: #f0f2f5;
+        padding-top: 2rem;
+        margin-top: 20px; /* Adiciona espaço no topo da página */
       }
+
+      .form-container {
+        background-color: #ffffff; /* Cor de fundo branca para o formulário */
+        padding: 2rem; /* Espaçamento interno */
+        border-radius: 8px; /* Bordas arredondadas */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra para dar destaque */
+        margin: 0 auto; /* Centra o formulário horizontalmente */
+        max-width: 900px; /* Largura máxima do formulário */
+      }
+
       .form-control,
       .btn-success {
         border-radius: 0.375rem;
@@ -19,7 +35,12 @@
       .form-label {
         margin-bottom: 0.5rem;
         font-weight: 500;
-        color: #495057;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .form-icon {
+        color: #198754; /* Cor Bootstrap 'success' */
       }
       .btn-success {
         color: #fff;
@@ -27,73 +48,108 @@
         border-color: #198754;
       }
       .btn-success:hover {
-        color: #fff;
         background-color: #157347;
         border-color: #146c43;
       }
-      h1 {
-        color: #006400; /* Cor que combina com a homepage */
+      h3 {
+        color: #006400;
+        text-align: center;
         font-weight: 500;
         margin-bottom: 1.5rem;
       }
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 1rem;
+      }
     </style>
   </head>
-  <body class="container mt-5">
-    <h1>Adicionar Novo Ponto de Interesse</h1>
-    <form action="/points-of-interest" method="POST">
-      <div class="mb-3">
-        <label for="name" class="form-label">Nome</label>
-        <input
-          type="text"
-          class="form-control"
-          id="name"
-          name="name"
-          required
-        />
-      </div>
-      <div class="row">
-        <div class="col-md-6 mb-3">
-          <label for="latitude" class="form-label">Latitude</label>
+  <body>
+    <div class="form-container">
+      <h3>
+        <i class="bi bi-geo-alt-fill"></i> Adicionar Novo Ponto de Interesse
+      </h3>
+      <form action="/points-of-interest" method="POST">
+        <!-- input Nome -->
+        <div class="form-group">
+          <label for="name" class="form-label">
+            <i class="bi bi-signpost-2-fill form-icon"></i>Nome
+          </label>
           <input
             type="text"
             class="form-control"
-            id="latitude"
-            name="latitude"
+            id="name"
+            name="name"
             required
           />
         </div>
-        <div class="col-md-6 mb-3">
-          <label for="longitude" class="form-label">Longitude</label>
-          <input
-            type="text"
+        <!-- inputs Latitude e Longitude  -->
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="latitude" class="form-label">
+                <i class="bi bi-geo form-icon"></i>Latitude
+              </label>
+              <input
+                type="text"
+                class="form-control"
+                id="latitude"
+                name="latitude"
+                required
+              />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="longitude" class="form-label">
+                <i class="bi bi-geo-alt form-icon"></i>Longitude
+              </label>
+              <input
+                type="text"
+                class="form-control"
+                id="longitude"
+                name="longitude"
+                required
+              />
+            </div>
+          </div>
+        </div>
+        <!-- input Descrição -->
+        <div class="form-group">
+          <label for="description" class="form-label">
+            <i class="bi bi-textarea-resize form-icon"></i>Descrição
+          </label>
+          <textarea
             class="form-control"
-            id="longitude"
-            name="longitude"
+            id="description"
+            name="description"
+            rows="3"
             required
-          />
+          ></textarea>
         </div>
-      </div>
-      <div class="mb-3">
-        <label for="description" class="form-label">Descrição</label>
-        <textarea
-          class="form-control"
-          id="description"
-          name="description"
-          rows="3"
-        ></textarea>
-      </div>
-      <div class="mb-3">
-        <label for="additionalInfo" class="form-label"
-          >Informações Adicionais</label
-        >
-        <textarea
-          class="form-control"
-          id="additionalInfo"
-          name="additionalInfo"
-          rows="3"
-        ></textarea>
-      </div>
-      <button type="submit" class="btn btn-success">Adicionar</button>
-    </form>
+        <!-- input Informação Adicional -->
+        <div class="form-group">
+          <label for="additionalInfo" class="form-label">
+            <i class="bi bi-card-list form-icon"></i>Informações Adicionais
+          </label>
+          <textarea
+            class="form-control"
+            id="additionalInfo"
+            name="additionalInfo"
+            rows="3"
+            required
+          ></textarea>
+        </div>
+        <!-- botão de submissão e cancelar -->
+        <div class="text-center">
+          <button type="submit" class="btn btn-success d-inline-block">
+            <i class="bi bi-plus-circle-fill me-2"></i>Adicionar
+          </button>
+          <a href="/points-of-interest" class="btn btn-outline-secondary">
+            <i class="bi bi-x-circle-fill me-2"></i>Cancelar
+          </a>
+        </div>
+      </form>
+    </div>
   </body>
 </html>
