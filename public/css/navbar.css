@@ -15,7 +15,7 @@
 
 .nav-item .nav-link:hover,
 .nav-item .nav-link:focus {
-  background-color: #004d00; /* Cor de fundo ao passar o rato ou focar */
+  background-color: #004d00; /* Cor de fundo ao passar o mouse ou focar */
 }
 
 /* Dropdown Menu */
@@ -24,13 +24,12 @@
 }
 
 .dropdown-item {
-  color: #ffffff; /* Cor do texto */
+  color: #fff; /* Cor do texto */
 }
 
-.navbar-custom .dropdown-item:hover,
-.navbar-custom .dropdown-item:focus {
-  background-color: #004d00; /* Cor de fundo ao passar o rato ou focar */
-  color: #ffffff;
+.dropdown-item:hover,
+.dropdown-item:focus {
+  background-color: #004d00; /* Cor de fundo ao passar o mouse ou focar */
 }
 
 .login-register {
@@ -45,7 +44,7 @@
 }
 
 .login-register .nav-link:hover {
-  color: #cca700; /* Cor do texto ao passar o rato */
+  color: #cca700; /* Cor do texto ao passar o mouse */
 }
 
 /* Toggler Icon */
@@ -54,7 +53,7 @@
 }
 
 .navbar-toggler-icon {
-  background-image: url("data:image/svg+xml,..."); /* Caminho para o ícone personalizado */
+  background-image: url("data:image/svg+xml,..."); /* Caminho para o ícone customizado */
 }
 
 /* Ajustes responsivos */
