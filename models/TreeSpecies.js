@@ -11,12 +11,6 @@ const treeSpeciesSchema = new mongoose.Schema({
   },
   habitat: String,
   image_url: String,
-  plantingGuide: {
-    soil: String,
-    sunlight: String,
-    watering: String,
-    // Adicione outros campos conforme necessário
-  }
 });
 
 const TreeSpecies = mongoose.model("TreeSpecies", treeSpeciesSchema);

@@ -4,18 +4,7 @@ const bcrypt = require("bcryptjs");
 const UserSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    match: [/.+\@.+\..+/, "Por favor, insira um endereço de e-mail válido"],
-  }, // Email com validação
-  firstName: { type: String, required: true }, // Novo
-  lastName: { type: String, required: true }, // Novo
-  phone: { type: String, required: true }, // Novo
-  age: { type: Number, required: true }, // Novo
-  address: { type: String, required: true }, // Novo
-  isAdmin: { type: Boolean, default: false }, // Adicionada esta linha
+  isAdmin: { type: Boolean, default: false }, // Adiciona esta linha
 });
 
 // Hashing da password antes de guardar o modelo
